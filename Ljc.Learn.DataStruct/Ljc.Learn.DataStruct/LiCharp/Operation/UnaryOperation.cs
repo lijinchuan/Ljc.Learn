@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Ljc.Learn.DataStruct.LiCharp.VarType
+namespace Ljc.Learn.DataStruct.LiCharp.Operation
 {
-    public class VarTypeBase
+    public class UnaryOperation:OperationBase
     {
     }
 }

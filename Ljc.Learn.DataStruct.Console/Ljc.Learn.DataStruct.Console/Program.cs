@@ -9,7 +9,13 @@ namespace Ljc.Learn.DataStruct.Console
     {
         static void Main(string[] args)
         {
-            DataStruct.Sort.QuickSort.Test();
+            //DataStruct.Sort.QuickSort.Test();
+
+            //语法分析器
+            //x:5;
+            //一元运算
+            //二元运算
+            //bool运算
 
             System.Console.Read();
         }

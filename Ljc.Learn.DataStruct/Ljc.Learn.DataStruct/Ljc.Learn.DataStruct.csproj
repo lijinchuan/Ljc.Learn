@@ -39,8 +39,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LiCharp\Express\ExpressBase.cs" />
+    <Compile Include="LiCharp\LiSharpCompiler.cs" />
+    <Compile Include="LiCharp\VarType\Array.cs" />
+    <Compile Include="LiCharp\VarType\Bollean.cs" />
+    <Compile Include="LiCharp\VarType\Float.cs" />
+    <Compile Include="LiCharp\VarType\Interger.cs" />
+    <Compile Include="LiCharp\VarType\String.cs" />
+    <Compile Include="LiCharp\VarType\SimleType.cs" />
+    <Compile Include="LiCharp\VarType\TypeBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sort\QuickSort.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tree\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

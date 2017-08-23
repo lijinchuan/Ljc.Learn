@@ -7,5 +7,9 @@ namespace Ljc.Learn.DataStruct.LiCharp
 {
     public class LiSharpCompiler
     {
+        public static void Complier(string express)
+        {
+
+        }
     }
 }
