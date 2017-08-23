@@ -41,6 +41,10 @@
   <ItemGroup>
     <Compile Include="LiCharp\Express\ExpressBase.cs" />
     <Compile Include="LiCharp\LiSharpCompiler.cs" />
+    <Compile Include="LiCharp\Operation\BinaryOperation.cs" />
+    <Compile Include="LiCharp\Operation\OperationBase.cs" />
+    <Compile Include="LiCharp\Operation\TernaryOperation.cs" />
+    <Compile Include="LiCharp\Operation\UnaryOperation.cs" />
     <Compile Include="LiCharp\VarType\Array.cs" />
     <Compile Include="LiCharp\VarType\Bollean.cs" />
     <Compile Include="LiCharp\VarType\Float.cs" />
