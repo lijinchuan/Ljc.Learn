@@ -13,16 +13,24 @@ namespace Ljc.Learn.DataStruct.LiCharp
             set;
         }
 
-        public CompileException(int line, string message)
+        public int Cols
+        {
+            get;
+            set;
+        }
+
+        public CompileException(int line,int cols, string message)
             : base(message)
         {
             Line = line;
+            Cols = cols;
         }
 
-        public CompileException(int line,string message, Exception innerException)
-            :base(message,innerException)
+        public CompileException(int line, int cols, string message, Exception innerException)
+            : base(message, innerException)
         {
             Line = line;
+            Cols = cols;
         }
     }
 }

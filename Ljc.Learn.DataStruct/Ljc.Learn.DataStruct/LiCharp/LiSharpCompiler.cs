@@ -8,6 +8,8 @@ namespace Ljc.Learn.DataStruct.LiCharp
     public class LiSharpCompiler
     {
         public static Dictionary<string, object> ProtectWords = new Dictionary<string, object>();
+        static char StringChar = '\'';
+        static char ChanageMeanChar = '\\';
 
         private string Code
         {
@@ -22,14 +24,56 @@ namespace Ljc.Learn.DataStruct.LiCharp
             Code = code;
         }
 
-        private bool CanConcat(char newchar)
+        private bool IsInstr()
         {
-            if (string.IsNullOrWhiteSpace(Context.ScanStr))
+            if (Context.CodeStack.Count > 0 && Context.CodeStack.Peek() == StringChar.ToString())
             {
                 return true;
             }
 
-            return true;
+            return false;
+        }
+
+        private bool CanConcat(char newchar)
+        {
+            //处理字符串
+            if (newchar.Equals(StringChar))
+            {
+                if (IsInstr())
+                {
+                    if (Context.LastScanChar == ChanageMeanChar)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        Context.CodeStack.Pop();
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (Context.LastScanChar == ChanageMeanChar)
+                    {
+                        throw new CompileException(Context.LineNo, Context.ColsNo, "意外的字符“\\”");
+                    }
+                    else
+                    {
+                        Context.CodeStack.Push(StringChar.ToString());
+                        return false;
+                    }
+                }
+            }
+            //处理四则运算
+            if (newchar == '+')
+            {
+                return true;
+            }
+            else
+            {
+                Context.ScanStr += newchar;
+                return true;
+            }
         }
 
         /// <summary>
@@ -52,7 +96,7 @@ namespace Ljc.Learn.DataStruct.LiCharp
             {
                 if (this.Context.CodeStack.Count == 0 || !this.Context.CodeStack.Peek().Equals("/*"))
                 {
-                    throw new CompileException(Context.LineNo, "期待注释开始标记“/*”");
+                    throw new CompileException(Context.LineNo, Context.ColsNo, "期待注释开始标记“/*”");
                 }
                 else
                 {
@@ -95,11 +139,25 @@ namespace Ljc.Learn.DataStruct.LiCharp
                     for (; Context.ColsNo < line.Length; Context.ColsNo++)
                     {
                         var ch = line[Context.ColsNo];
-                        
-                    }
+                        if (CanConcat(ch))
+                        {
+                            //Context.ScanStr += ch;
+                        }
+                        else
+                        {
+                            var str = Context.ScanStr;
+                            Console.WriteLine(str);
+                            Context.ScanStr = null;
+                        }
 
-                    Console.WriteLine(line);
+                        Context.LastScanChar = ch;
+                    }
                 }
+            }
+
+            if (Context.CodeStack.Count > 0)
+            {
+                throw new CompileException(Context.LineNo, Context.ColsNo, "意外的字符:" + Context.CodeStack.Peek());
             }
         }
     }
