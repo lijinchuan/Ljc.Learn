@@ -39,10 +39,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompilerContext.cs" />
+    <Compile Include="LiCharp\Exception\CompileException.cs" />
     <Compile Include="LiCharp\Express\ExpressBase.cs" />
+    <Compile Include="LiCharp\Function\FunctionBase.cs" />
     <Compile Include="LiCharp\LiSharpCompiler.cs" />
     <Compile Include="LiCharp\Operation\BinaryOperation.cs" />
+    <Compile Include="LiCharp\Operation\DeviOperation.cs" />
+    <Compile Include="LiCharp\Operation\MinusOperation.cs" />
+    <Compile Include="LiCharp\Operation\MultOperation.cs" />
     <Compile Include="LiCharp\Operation\OperationBase.cs" />
+    <Compile Include="LiCharp\Operation\OperationPrivilege.cs" />
+    <Compile Include="LiCharp\Operation\PlusOperation.cs" />
     <Compile Include="LiCharp\Operation\TernaryOperation.cs" />
     <Compile Include="LiCharp\Operation\UnaryOperation.cs" />
     <Compile Include="LiCharp\VarType\Array.cs" />
@@ -54,9 +62,11 @@
     <Compile Include="LiCharp\VarType\TypeBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sort\QuickSort.cs" />
+    <Compile Include="Tree\Tree.cs" />
+    <Compile Include="Tree\TreeCore.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Tree\" />
+    <Folder Include="Stack\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

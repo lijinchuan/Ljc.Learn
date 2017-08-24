@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Ljc.Learn.DataStruct.LiCharp.VarType
+namespace Ljc.Learn.DataStruct.LiCharp.Function
 {
-    public class TypeBase:Express.ExpressBase
+    public class FunctionBase:Express.ExpressBase
     {
     }
 }

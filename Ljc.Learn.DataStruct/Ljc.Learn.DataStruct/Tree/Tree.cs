@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Ljc.Learn.DataStruct.LiCharp.Express
+namespace Ljc.Learn.DataStruct.Tree
 {
-    public class ExpressBase
+    public class BinTree
     {
-        public ExpressBase Express
+        public object Node
         {
             get;
             set;
         }
 
-        public ExpressBase Left
+        public BinTree Left
         {
             get;
             set;
         }
 
-        public ExpressBase Right
+        public BinTree Right
         {
             get;
             set;
