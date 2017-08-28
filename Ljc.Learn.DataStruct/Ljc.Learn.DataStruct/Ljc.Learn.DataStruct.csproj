@@ -63,6 +63,7 @@
     <Compile Include="List\ListCore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sort\QuickSort.cs" />
+    <Compile Include="String\StringCore.cs" />
     <Compile Include="Tree\Tree.cs" />
     <Compile Include="Tree\TreeCore.cs" />
   </ItemGroup>

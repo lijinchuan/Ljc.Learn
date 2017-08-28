@@ -26,9 +26,9 @@ namespace Ljc.Learn.DataStruct.Console
 //            /*中国人民*/ 
 //            'asdasdfasdf'").Complier();
 
-//            System.Console.Read();
+            //DataStruct.List.ListCore.PrientTest();
 
-            DataStruct.List.ListCore.PrientTest();
+            DataStruct.String.StringCore.Test();
             System.Console.Read();
         }
     }
