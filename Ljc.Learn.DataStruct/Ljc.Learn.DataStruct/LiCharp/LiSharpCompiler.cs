@@ -10,6 +10,7 @@ namespace Ljc.Learn.DataStruct.LiCharp
         public static Dictionary<string, object> ProtectWords = new Dictionary<string, object>();
         static char StringChar = '\'';
         static char ChanageMeanChar = '\\';
+        static char WriteSpace=' ';
 
         private string Code
         {
@@ -36,10 +37,11 @@ namespace Ljc.Learn.DataStruct.LiCharp
 
         private bool CanConcat(char newchar)
         {
+            bool isinstr = IsInstr();
             //处理字符串
             if (newchar.Equals(StringChar))
             {
-                if (IsInstr())
+                if (isinstr)
                 {
                     if (Context.LastScanChar == ChanageMeanChar)
                     {
@@ -64,13 +66,43 @@ namespace Ljc.Learn.DataStruct.LiCharp
                     }
                 }
             }
-            //处理四则运算
-            if (newchar == '+')
+            else if (newchar.Equals(ChanageMeanChar))
             {
-                return true;
+                if (!isinstr)
+                {
+                    throw new CompileException(Context.LineNo, Context.ColsNo, "意外的字符“\\”");
+                }
+                else
+                {
+                    Context.ScanStr += newchar;
+                    return true;
+                }
+            }
+            else if (newchar.Equals(WriteSpace))
+            {
+                if (isinstr)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
+                if (isinstr)
+                {
+                    Context.ScanStr += newchar;
+                    return true;
+                }
+
+                //处理四则运算
+                if (newchar == '+')
+                {
+                    return true;
+                }
+
                 Context.ScanStr += newchar;
                 return true;
             }
