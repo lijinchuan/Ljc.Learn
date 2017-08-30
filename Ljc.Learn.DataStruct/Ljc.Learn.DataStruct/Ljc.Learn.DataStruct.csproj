@@ -39,7 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompilerContext.cs" />
+    <Compile Include="LiCharp\CompilerContext.cs" />
     <Compile Include="LiCharp\Exception\CompileException.cs" />
     <Compile Include="LiCharp\Express\ExpressBase.cs" />
     <Compile Include="LiCharp\Function\FunctionBase.cs" />
