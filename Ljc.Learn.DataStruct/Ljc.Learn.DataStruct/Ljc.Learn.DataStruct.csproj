@@ -53,6 +53,7 @@
     <Compile Include="LiCharp\Operation\PlusOperation.cs" />
     <Compile Include="LiCharp\Operation\TernaryOperation.cs" />
     <Compile Include="LiCharp\Operation\UnaryOperation.cs" />
+    <Compile Include="LiCharp\TokenType.cs" />
     <Compile Include="LiCharp\VarType\Array.cs" />
     <Compile Include="LiCharp\VarType\Bollean.cs" />
     <Compile Include="LiCharp\VarType\Float.cs" />

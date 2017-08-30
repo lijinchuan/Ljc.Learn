@@ -100,9 +100,8 @@ namespace Ljc.Learn.DataStruct.LiCharp
                 //处理四则运算
                 if (newchar == '+')
                 {
-                    return true;
+                    return false;
                 }
-
                 Context.ScanStr += newchar;
                 return true;
             }
@@ -174,15 +173,15 @@ namespace Ljc.Learn.DataStruct.LiCharp
                         if (CanConcat(ch))
                         {
                             //Context.ScanStr += ch;
+                            Context.LastScanChar = ch;
                         }
                         else
                         {
                             var str = Context.ScanStr;
                             Console.WriteLine(str);
+                            Console.WriteLine(ch);
                             Context.ScanStr = null;
                         }
-
-                        Context.LastScanChar = ch;
                     }
                 }
             }

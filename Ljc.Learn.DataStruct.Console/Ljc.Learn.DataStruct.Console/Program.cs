@@ -18,13 +18,7 @@ namespace Ljc.Learn.DataStruct.Console
             //二元运算
             //bool运算
 
-            new LiSharpCompiler(@"'asdf'
-            'BadImageFormatException'
-            //中国人
-            /*谁说不是呢
-            */
-            /*中国人民*/ 
-            'asdasdfasdf'").Complier();
+            new LiSharpCompiler(@"31+'2365+'+1").Complier();
 
             //DataStruct.List.ListCore.PrientTest();
 

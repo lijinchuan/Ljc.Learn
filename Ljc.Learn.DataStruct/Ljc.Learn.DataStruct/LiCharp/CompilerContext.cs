@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Ljc.Learn.DataStruct
+namespace Ljc.Learn.DataStruct.LiCharp
 {
     public class CompilerContext
     {
@@ -33,7 +33,14 @@ namespace Ljc.Learn.DataStruct
             get;
             set;
         }
+
         public string ScanStr
+        {
+            get;
+            set;
+        }
+
+        public TokenType TokenType
         {
             get;
             set;
