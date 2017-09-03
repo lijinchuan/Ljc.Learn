@@ -68,7 +68,7 @@ namespace Ljc.Learn.DataStruct.List
             }
         }
 
-        public static void PrientTest()
+        public static void PrintTest()
         {
             var lista = new List<int>() { 9,9,9,9};
             //var lista = new List<int>() { 1,1,2,3,1};
