@@ -8,9 +8,11 @@ namespace Ljc.Learn.DataStruct.LiCharp
     public class LiSharpCompiler
     {
         public static Dictionary<string, object> ProtectWords = new Dictionary<string, object>();
-        static char StringChar = '\'';
-        static char ChanageMeanChar = '\\';
-        static char WriteSpace=' ';
+        const char StringChar = '\'';
+        const char ChanageMeanChar = '\\';
+        const char WriteSpace=' ';
+        const char EnterLine='\r';
+        const char NewLine='\n';
 
         private string Code
         {
@@ -35,118 +37,129 @@ namespace Ljc.Learn.DataStruct.LiCharp
             return false;
         }
 
-        private bool CanConcat(char newchar)
+
+        private bool JoinToken(char ch)
         {
-            bool isinstr = IsInstr();
-            //处理字符串
-            if (newchar.Equals(StringChar))
+            if (Context.TokenType == TokenType.LineAnnotation
+                || Context.TokenType == TokenType.LinesAnnotation)
             {
-                if (isinstr)
+                if (Context.TokenType == TokenType.LineAnnotation)
                 {
-                    if (Context.LastScanChar == ChanageMeanChar)
+                    if (ch == EnterLine)
                     {
                         return true;
                     }
-                    else
+                    if (ch == NewLine)
                     {
-                        Context.CodeStack.Pop();
                         return false;
                     }
                 }
-                else
+
+                if (Context.TokenType == TokenType.LinesAnnotation)
                 {
-                    if (Context.LastScanChar == ChanageMeanChar)
+                    if (ch == '/'&&Context.LastScanChar=='*')
                     {
-                        throw new CompileException(Context.LineNo, Context.ColsNo, "意外的字符“\\”");
-                    }
-                    else
-                    {
-                        Context.CodeStack.Push(StringChar.ToString());
+                        Context.Token = Context.Token.TrimEnd('*');
                         return false;
                     }
                 }
+                Context.Token += ch;
+                Context.LastScanChar = ch;
+                return true;
             }
-            else if (newchar.Equals(ChanageMeanChar))
+            else if (Context.TokenType == TokenType.str)
             {
-                if (!isinstr)
+                if (Context.LastScanChar != ChanageMeanChar && (ch == '"' || ch == '\''))
                 {
-                    throw new CompileException(Context.LineNo, Context.ColsNo, "意外的字符“\\”");
+                    if (Context.CodeStack.Count == 0)
+                    {
+                        throw new CompileException(Context.LineNo, Context.ColsNo, "意外的字符:" + ch);
+                    }
+                    var popch = Context.CodeStack.Pop();
+                    if (popch == ch.ToString())
+                    {
+                        return false;
+                    }
+                }
+                else if (Context.LastScanChar != ChanageMeanChar && ch == ChanageMeanChar)
+                {
+                    //转义
+                    Context.LastScanChar = ChanageMeanChar;
+                    return true;
+                }
+
+                Context.LastScanChar = ch;
+                Context.Token += ch;
+                return true;
+            }
+            else if (Context.TokenType == TokenType.Any)
+            {
+                if (ch == '/')
+                {
+                    if (Context.LastScanChar == '/')
+                    {
+                        Context.TokenType = TokenType.LineAnnotation;
+                    }
+                }
+                else if (ch == '*')
+                {
+                    if (Context.LastScanChar == '/')
+                    {
+                        Context.TokenType = TokenType.LinesAnnotation;
+                    }
+                }
+                else if (ch == '"' || ch == '\'')
+                {
+                    Context.CodeStack.Push(ch.ToString());
+                    Context.TokenType = TokenType.str;
+                }
+                else if (ch >= '0' && ch <= '9')
+                {
+                    Context.Token += ch;
+                    Context.TokenType = TokenType.interger;
+                }
+                else if (ch == '.' && Context.TokenType == TokenType.interger)
+                {
+                    Context.Token += ch;
+                    Context.TokenType = TokenType.floatnumber;
                 }
                 else
                 {
-                    Context.ScanStr += newchar;
-                    return true;
+                    Context.Token += ch;
                 }
-            }
-            else if (newchar.Equals(WriteSpace))
-            {
-                if (isinstr)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                Context.LastScanChar = ch;
+                return true;
             }
             else
             {
-                if (isinstr)
+                if (ch == '/' && Context.LastScanChar == '/')
                 {
-                    Context.ScanStr += newchar;
-                    return true;
-                }
-
-                //处理四则运算
-                if (newchar == '+')
-                {
+                    Context.ColsNo = -2;
                     return false;
                 }
-                Context.ScanStr += newchar;
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// 处理注释
-        /// </summary>
-        /// <returns></returns>
-        private string ProcessAnnotation(string code)
-        {
-            var idx = code.IndexOf("//");
-
-            if (code.StartsWith("//"))
-            {
-                return null;
-            }
-            else if (code.StartsWith("/*") && code.EndsWith("*/"))
-            {
-                return null;
-            }
-            else if (code.EndsWith("*/"))
-            {
-                if (this.Context.CodeStack.Count == 0 || !this.Context.CodeStack.Peek().Equals("/*"))
+                else if (ch == '*')
                 {
-                    throw new CompileException(Context.LineNo, Context.ColsNo, "期待注释开始标记“/*”");
+                    if (Context.LastScanChar == '/')
+                    {
+                        Context.ColsNo = -2;
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
+                else if (ch == '"' || ch == '\'')
+                {
+                    Context.ColsNo -= 1;
+                    return false;
                 }
                 else
                 {
-                    this.Context.CodeStack.Pop();
-                    return null;
+                    Context.Token += ch;
+                    return true;
                 }
-
             }
-            else if (code.StartsWith("/*"))
-            {
-                this.Context.CodeStack.Push("/*");
-                return null;
-            }
-            else if (this.Context.CodeStack.Count > 0 && this.Context.CodeStack.Peek().Equals("/*"))
-            {
-                return null;
-            }
-
-            return code;
         }
 
         public void Complier()
@@ -159,30 +172,37 @@ namespace Ljc.Learn.DataStruct.LiCharp
                     Context.LineNo += 1;
                     Context.ColsNo = 0;
 
-                    line = line.Trim();
+                    line = line.Trim() + NewLine;
 
-                    line = ProcessAnnotation(line);
-                    if (line == null)
+                    if (string.IsNullOrWhiteSpace(line))
                     {
                         continue;
                     }
 
+                    char ch='\0';
                     for (; Context.ColsNo < line.Length; Context.ColsNo++)
                     {
-                        var ch = line[Context.ColsNo];
-                        if (CanConcat(ch))
+                        if (ch == '*')
                         {
-                            //Context.ScanStr += ch;
-                            Context.LastScanChar = ch;
+
+                        }
+                        ch = line[Context.ColsNo];
+                        if (JoinToken(ch))
+                        {
+                            continue;
                         }
                         else
                         {
-                            var str = Context.ScanStr;
-                            Console.WriteLine(str);
-                            Console.WriteLine(ch);
-                            Context.ScanStr = null;
+                            Console.WriteLine(Context.Token.Replace("\n",""));
+                            Context.LastToken = Context.Token;
+                            Context.Token = string.Empty;
+                            
+                            Context.LastTokenType = Context.TokenType;
+                            Context.TokenType = TokenType.Any;
                         }
                     }
+
+                    Console.WriteLine(Context.Token);
                 }
             }
 

@@ -34,7 +34,19 @@ namespace Ljc.Learn.DataStruct.LiCharp
             set;
         }
 
-        public string ScanStr
+        public string LastToken
+        {
+            get;
+            set;
+        }
+
+        public string Token
+        {
+            get;
+            set;
+        }
+
+        public TokenType LastTokenType
         {
             get;
             set;

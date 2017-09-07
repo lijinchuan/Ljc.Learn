@@ -10,6 +10,7 @@ namespace Ljc.Learn.DataStruct.LiCharp
         Any, //任何
         LineAnnotation, //行注释
         LinesAnnotation, //多行注释
+        varname,
         str,
         interger,
         floatnumber,
