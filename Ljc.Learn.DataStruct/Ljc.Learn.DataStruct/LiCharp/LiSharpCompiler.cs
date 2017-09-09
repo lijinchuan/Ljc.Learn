@@ -37,6 +37,16 @@ namespace Ljc.Learn.DataStruct.LiCharp
             return false;
         }
 
+        private bool CharIsNum(char ch)
+        {
+            return ch >= '0' && ch <= '9';
+        }
+
+        private bool CharIsMathOpSymbol(char ch)
+        {
+            return ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '%';
+        }
+
 
         private bool JoinToken(char ch)
         {
@@ -113,15 +123,35 @@ namespace Ljc.Learn.DataStruct.LiCharp
                     Context.CodeStack.Push(ch.ToString());
                     Context.TokenType = TokenType.str;
                 }
-                else if (ch >= '0' && ch <= '9')
+                else if (CharIsNum(ch) || (ch == '-' && (CharIsMathOpSymbol(Context.LastScanChar)||Context.LastScanChar=='\0'||Context.LastScanChar=='\n') && CharIsNum(Context.NextChar)))
                 {
                     Context.Token += ch;
                     Context.TokenType = TokenType.interger;
                 }
-                else if (ch == '.' && Context.TokenType == TokenType.interger)
+                else if (ch == '+')
                 {
-                    Context.Token += ch;
-                    Context.TokenType = TokenType.floatnumber;
+                    if (CharIsNum(Context.NextChar))
+                    {
+                        Context.Token += ch;
+                        Context.LastScanChar = ch;
+                        return false;
+                    }
+                }
+                else if (ch == '-')
+                {
+                    if (Context.IsBack)
+                    {
+                        Context.IsBack = false;
+                        Context.LastScanChar = ch;
+                        Context.Token += ch;
+                        return false;
+                    }
+                    else
+                    {
+                        Context.ColsNo--;
+                        Context.IsBack = true;
+                        return false;
+                    }
                 }
                 else
                 {
@@ -149,9 +179,27 @@ namespace Ljc.Learn.DataStruct.LiCharp
                         return true;
                     }
                 }
+                else if (ch == '.' && Context.TokenType == TokenType.interger)
+                {
+                    Context.Token += ch;
+                    Context.TokenType = TokenType.floatnumber;
+                    Context.LastScanChar = ch;
+                    return true;
+                }
                 else if (ch == '"' || ch == '\'')
                 {
                     Context.ColsNo -= 1;
+                    return false;
+                }
+                else if (ch == '+')
+                {
+                    Context.ColsNo--;
+                    return false;
+                }
+                else if (ch == '-')
+                {
+                    Context.ColsNo--;
+                    Context.IsBack = true;
                     return false;
                 }
                 else
@@ -182,11 +230,12 @@ namespace Ljc.Learn.DataStruct.LiCharp
                     char ch='\0';
                     for (; Context.ColsNo < line.Length; Context.ColsNo++)
                     {
-                        if (ch == '*')
-                        {
-
-                        }
                         ch = line[Context.ColsNo];
+                        if (Context.ColsNo < line.Length - 1)
+                        {
+                            Context.NextChar = line[Context.ColsNo + 1];
+                        }
+                        
                         if (JoinToken(ch))
                         {
                             continue;
@@ -201,9 +250,8 @@ namespace Ljc.Learn.DataStruct.LiCharp
                             Context.TokenType = TokenType.Any;
                         }
                     }
-
-                    Console.WriteLine(Context.Token);
                 }
+                Console.WriteLine(Context.Token);
             }
 
             if (Context.CodeStack.Count > 0)

@@ -21,9 +21,10 @@ namespace Ljc.Learn.DataStruct.Console
             new LiSharpCompiler(@"
             //单行备注
             /*
-            多行备注
+            多行备注\\c'xx'asdf
             */
-            31+'2365+'+1").Complier();
+            -31+2365+1--33
+            88-98+7").Complier();
 
             //DataStruct.List.ListCore.PrientTest();
 

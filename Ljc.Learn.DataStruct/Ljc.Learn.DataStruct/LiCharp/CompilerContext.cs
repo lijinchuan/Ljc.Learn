@@ -34,6 +34,12 @@ namespace Ljc.Learn.DataStruct.LiCharp
             set;
         }
 
+        public char NextChar
+        {
+            get;
+            set;
+        }
+
         public string LastToken
         {
             get;
@@ -41,6 +47,15 @@ namespace Ljc.Learn.DataStruct.LiCharp
         }
 
         public string Token
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 是否回溯
+        /// </summary>
+        public bool IsBack
         {
             get;
             set;
