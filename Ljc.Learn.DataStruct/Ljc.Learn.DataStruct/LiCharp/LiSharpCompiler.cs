@@ -104,7 +104,11 @@ namespace Ljc.Learn.DataStruct.LiCharp
             }
             else if (Context.TokenType == TokenType.Any)
             {
-                if (ch == '/')
+                if (ch == NewLine)
+                {
+                    return false;
+                }
+                else if (ch == '/')
                 {
                     if (Context.LastScanChar == '/')
                     {
@@ -133,6 +137,7 @@ namespace Ljc.Learn.DataStruct.LiCharp
                     if (CharIsNum(Context.NextChar))
                     {
                         Context.Token += ch;
+                        Context.TokenType = TokenType.plus;
                         Context.LastScanChar = ch;
                         return false;
                     }
@@ -144,6 +149,7 @@ namespace Ljc.Learn.DataStruct.LiCharp
                         Context.IsBack = false;
                         Context.LastScanChar = ch;
                         Context.Token += ch;
+                        Context.TokenType = TokenType.minus;
                         return false;
                     }
                     else
@@ -162,7 +168,11 @@ namespace Ljc.Learn.DataStruct.LiCharp
             }
             else
             {
-                if (ch == '/' && Context.LastScanChar == '/')
+                if (ch == NewLine)
+                {
+                    return false;
+                }
+                else if (ch == '/' && Context.LastScanChar == '/')
                 {
                     Context.ColsNo = -2;
                     return false;
@@ -242,7 +252,10 @@ namespace Ljc.Learn.DataStruct.LiCharp
                         }
                         else
                         {
-                            Console.WriteLine(Context.Token.Replace("\n",""));
+                            //if (Context.TokenType != TokenType.Any)
+                            {
+                                Console.WriteLine(Context.Token.Replace("\n", ""));
+                            }
                             Context.LastToken = Context.Token;
                             Context.Token = string.Empty;
                             
@@ -251,7 +264,7 @@ namespace Ljc.Learn.DataStruct.LiCharp
                         }
                     }
                 }
-                Console.WriteLine(Context.Token);
+                
             }
 
             if (Context.CodeStack.Count > 0)
