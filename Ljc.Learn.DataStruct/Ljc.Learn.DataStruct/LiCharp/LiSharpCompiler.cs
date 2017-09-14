@@ -108,6 +108,45 @@ namespace Ljc.Learn.DataStruct.LiCharp
                 {
                     return false;
                 }
+                else if (ch == '(')
+                {
+                    if (Context.IsBack)
+                    {
+                        Context.Token += ch;
+                        Context.IsBack = false;
+                        Context.TokenType = TokenType.leftparentheses;
+                        Context.CodeStack.Push(ch.ToString());
+                        return false;
+                    }
+                    else
+                    {
+                        Context.ColsNo--;
+                        Context.IsBack = true;
+                        return false;
+                    }
+                }
+                else if (ch == ')')
+                {
+                    if (Context.IsBack)
+                    {
+                        if (Context.CodeStack.Peek() != "(")
+                        {
+                            throw new CompileException(Context.LineNo, Context.ColsNo, "意外的字符:" + ch);
+                        }
+                        Context.CodeStack.Pop();
+                        Context.LastScanChar = ch;
+                        Context.TokenType = TokenType.rightparentheses;
+                        Context.IsBack = false;
+                        Context.Token += ch;
+                        return false;
+                    }
+                    else
+                    {
+                        Context.IsBack = true;
+                        Context.ColsNo--;
+                        return false;
+                    }
+                }
                 else if (ch == '/')
                 {
                     if (Context.LastScanChar == '/')
@@ -127,14 +166,14 @@ namespace Ljc.Learn.DataStruct.LiCharp
                     Context.CodeStack.Push(ch.ToString());
                     Context.TokenType = TokenType.str;
                 }
-                else if (CharIsNum(ch) || (ch == '-' && (CharIsMathOpSymbol(Context.LastScanChar)||Context.LastScanChar=='\0'||Context.LastScanChar=='\n') && CharIsNum(Context.NextChar)))
+                else if (CharIsNum(ch) || (ch == '-' && (CharIsMathOpSymbol(Context.LastScanChar) || Context.LastScanChar == '\0' || Context.LastScanChar == '\n') && CharIsNum(Context.NextChar)))
                 {
                     Context.Token += ch;
                     Context.TokenType = TokenType.interger;
                 }
                 else if (ch == '+')
                 {
-                    if (CharIsNum(Context.NextChar))
+                    if (CharIsNum(Context.NextChar)||Context.NextChar=='(')
                     {
                         Context.Token += ch;
                         Context.TokenType = TokenType.plus;
@@ -171,6 +210,45 @@ namespace Ljc.Learn.DataStruct.LiCharp
                 if (ch == NewLine)
                 {
                     return false;
+                }
+                else if (ch == '(')
+                {
+                    if (Context.IsBack)
+                    {
+                        Context.Token += ch;
+                        Context.IsBack = false;
+                        Context.TokenType = TokenType.leftparentheses;
+                        Context.CodeStack.Push("(");
+                        return false;
+                    }
+                    else
+                    {
+                        Context.ColsNo--;
+                        Context.IsBack = true;
+                        return false;
+                    }
+                }
+                else if (ch == ')')
+                {
+                    if (Context.IsBack)
+                    {
+                        if (Context.CodeStack.Peek() != "(")
+                        {
+                            throw new CompileException(Context.LineNo, Context.ColsNo, "意外的字符:" + ch);
+                        }
+                        Context.CodeStack.Pop();
+                        Context.LastScanChar = ch;
+                        Context.TokenType = TokenType.rightparentheses;
+                        Context.IsBack = false;
+                        Context.Token += ch;
+                        return false;
+                    }
+                    else
+                    {
+                        Context.IsBack = true;
+                        Context.ColsNo--;
+                        return false;
+                    }
                 }
                 else if (ch == '/' && Context.LastScanChar == '/')
                 {
@@ -264,7 +342,6 @@ namespace Ljc.Learn.DataStruct.LiCharp
                         }
                     }
                 }
-                
             }
 
             if (Context.CodeStack.Count > 0)
