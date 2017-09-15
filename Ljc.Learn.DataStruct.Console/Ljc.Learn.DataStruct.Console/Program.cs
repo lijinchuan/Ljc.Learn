@@ -26,7 +26,7 @@ namespace Ljc.Learn.DataStruct.Console
 //            -31+2365+1--33
 //            88-98+7").Complier();
 
-            new LiSharpCompiler(@"3+(5--8)+6").Complier();
+            new LiSharpCompiler(@"3+(5--8)+6-7+33--45*20").Complier();
 
             //DataStruct.List.ListCore.PrientTest();
 

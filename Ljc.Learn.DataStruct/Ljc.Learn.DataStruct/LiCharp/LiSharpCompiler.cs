@@ -110,20 +110,10 @@ namespace Ljc.Learn.DataStruct.LiCharp
                 }
                 else if (ch == '(')
                 {
-                    if (Context.IsBack)
-                    {
-                        Context.Token += ch;
-                        Context.IsBack = false;
-                        Context.TokenType = TokenType.leftparentheses;
-                        Context.CodeStack.Push(ch.ToString());
-                        return false;
-                    }
-                    else
-                    {
-                        Context.ColsNo--;
-                        Context.IsBack = true;
-                        return false;
-                    }
+                    Context.Token += ch;
+                    Context.TokenType = TokenType.leftparentheses;
+                    Context.CodeStack.Push(ch.ToString());
+                    return false;
                 }
                 else if (ch == ')')
                 {
@@ -160,6 +150,13 @@ namespace Ljc.Learn.DataStruct.LiCharp
                     {
                         Context.TokenType = TokenType.LinesAnnotation;
                     }
+                    else
+                    {
+                        Context.Token += ch;
+                        Context.TokenType = TokenType.mult;
+                        
+                        return false;
+                    }
                 }
                 else if (ch == '"' || ch == '\'')
                 {
@@ -173,7 +170,7 @@ namespace Ljc.Learn.DataStruct.LiCharp
                 }
                 else if (ch == '+')
                 {
-                    if (CharIsNum(Context.NextChar)||Context.NextChar=='(')
+                    if (CharIsNum(Context.NextChar) || Context.NextChar == '(')
                     {
                         Context.Token += ch;
                         Context.TokenType = TokenType.plus;
@@ -264,7 +261,19 @@ namespace Ljc.Learn.DataStruct.LiCharp
                     }
                     else
                     {
-                        return true;
+                        if (Context.IsBack)
+                        {
+                            Context.IsBack = false;
+                            Context.TokenType = TokenType.mult;
+                            Context.Token += ch;
+                            return false;
+                        }
+                        else
+                        {
+                            Context.IsBack = true;
+                            Context.ColsNo--;
+                            return false;
+                        }
                     }
                 }
                 else if (ch == '.' && Context.TokenType == TokenType.interger)
