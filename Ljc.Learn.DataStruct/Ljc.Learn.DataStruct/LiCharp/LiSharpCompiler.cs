@@ -229,7 +229,7 @@ namespace Ljc.Learn.DataStruct.LiCharp
                 {
                     if (Context.IsBack)
                     {
-                        if (Context.CodeStack.Peek() != "(")
+                        if (Context.CodeStack.Count == 0 || Context.CodeStack.Peek() != "(")
                         {
                             throw new CompileException(Context.LineNo, Context.ColsNo, "意外的字符:" + ch);
                         }
